@@ -135,4 +135,41 @@ public class AbstractItemTest {
         assertEquals("NameNotEditableItem", item.getName());
     }
 
+    private static class NameEditableItem extends AbstractItem {
+
+        protected NameEditableItem(ItemGroup parent, String name) {
+            super(parent, name);
+        }
+
+        @Override
+        public Collection<? extends Job> getAllJobs() {
+            return null;
+        }
+
+        @Override
+        public boolean isNameEditable() {
+            return false; //so far it's the default value, but it's good to be explicit for test.
+        }
+    }
+
+    @Test
+    @Issue("JENKINS-58571")
+    public void meuTesteaa() {
+
+        // GIVEN
+        NameNotEditableItem item = new NameNotEditableItem(null, "NameNotEditableItem");
+
+        // WHEN
+        try {
+            item.renameTo("NewName");
+            // Se chegar aqui, o teste falha, pois deveria lançar uma IOException
+            //fail("Expected IOException was not thrown.");
+        } catch (IOException e) {
+            // THEN
+            assertEquals("Trying to rename an item that does not support this operation.", e.getMessage());
+            assertEquals("NameNotEditableItem", item.getName());
+        }
+        System.out.println("Olaa");
+    }
+
 }

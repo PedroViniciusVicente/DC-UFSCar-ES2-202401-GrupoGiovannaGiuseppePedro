@@ -349,6 +349,7 @@ public abstract class AbstractItem extends Actionable implements Loadable, Item,
      */
     @SuppressFBWarnings(value = "SWL_SLEEP_WITH_LOCK_HELD", justification = "no big deal")
     protected void renameTo(final String newName) throws IOException {
+        System.out.println("Testandoooaaa");
 
         if (!isNameEditable()) {
             throw new IOException("Trying to rename an item that does not support this operation.");
