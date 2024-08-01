@@ -95,6 +95,7 @@ import org.kohsuke.stapler.interceptor.RequirePOST;
 import org.springframework.security.access.AccessDeniedException;
 import org.xml.sax.SAXException;
 
+import java.util.Random;
 /**
  * Partial default implementation of {@link Item}.
  *
@@ -408,7 +409,7 @@ public abstract class AbstractItem extends Actionable implements Loadable, Item,
                     }
                 //}
             } finally {
-                System.out.println("apenas teste");
+                System.out.println("finalizou o renameTo");
             }
         }
     }
@@ -457,6 +458,50 @@ public abstract class AbstractItem extends Actionable implements Loadable, Item,
         }
         ItemListener.fireLocationChange(this, oldFullName);
     }*/
+
+
+    // Minha funcao de teste para o renameTo
+    @SuppressFBWarnings(value = "SWL_SLEEP_WITH_LOCK_HELD", justification = "no big deal")
+    protected void meurenameTo(final String newName) throws IOException {
+        System.out.println("Entrou na funcao renameTo");
+        Random random = new Random();
+
+        synchronized (this) {
+            System.out.println("Entrou no synchronized");
+            // sanity check
+            if (newName == null)
+                throw new IllegalArgumentException("New name is not given");
+
+            // noop?
+            if (this.name.equals(newName))
+                return;
+
+            doSetName(newName);
+
+            boolean success = false;
+
+            try { // rename data files
+                System.out.println("Entrou no try");
+                boolean interrupted = false;
+                boolean renamed = false;
+
+                try {
+                    System.out.println("Chegou no sleep!");
+                    int tempoAleatorio = random.nextInt(1000) + 1;
+                    System.out.println("Tempo aleatorio foi de: " + tempoAleatorio);
+                    Thread.sleep(tempoAleatorio);
+                    System.out.println("Saiu no sleep!");
+                } catch (InterruptedException e) {
+                    // process the interruption later
+                    interrupted = true;
+                }
+                //}
+            } finally {
+                System.out.println("finalizou o renameTo");
+            }
+        }
+    }
+
 
 
     /**

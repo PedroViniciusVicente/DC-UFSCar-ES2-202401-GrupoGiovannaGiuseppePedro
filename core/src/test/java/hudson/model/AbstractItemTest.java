@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotEquals;
+
 
 
 import java.io.IOException;
@@ -232,6 +234,40 @@ public class AbstractItemTest {
 
             assertEquals("Trying to rename an item that does not support this operation.", e.getMessage());
             assertEquals("NameNotEditableItem", item.getName());
+        }
+        System.out.println("Fim do teste");
+    }
+
+    @Test
+    //@Issue("JENKINS-58571")
+    public void tempoAleatorioSleep() {
+        // Arrange
+        GenericItem item1 = new GenericItem(null, "NomeAntigo1");
+        GenericItem item2 = new GenericItem(null, "NomeAntigo2");
+        GenericItem item3 = new GenericItem(null, "NomeAntigo3");
+        // Act
+        try {
+            long startTime = System.currentTimeMillis();
+
+            item1.meurenameTo("NovoNome1");
+            item2.meurenameTo("NovoNome2");
+            item3.meurenameTo("NovoNome3");
+
+            long endTime = System.currentTimeMillis();
+
+
+            System.out.println("Tempo gasto em ms foi: ");
+            System.out.println(endTime - startTime);
+
+            // Assert
+            assertNotEquals("NovoNome1", item1.getName());
+            assertNotEquals("NovoNome2", item2.getName());
+            assertNotEquals("NovoNome3", item3.getName());
+
+        } catch (IOException e) {
+
+            assertEquals("Trying to rename an item that does not support this operation.", e.getMessage());
+            assertEquals("NameNotEditableItem", item1.getName());
         }
         System.out.println("Fim do teste");
     }
