@@ -158,85 +158,46 @@ public class AbstractItemTest {
         }
     }
 
+    //@Test
+    //@Issue("JENKINS-58571")
+    //public void excessoTempoDevidoSleep() {
+
+
+    //}
+
     @Test
     //@Issue("JENKINS-58571")
-    public void excessoDeTempoDevidoSleep() {
+    public void excessoTempoMultiplosRename() {
 
-        // GIVEN
+        // Arrange
         NameNotEditableItem item = new NameNotEditableItem(null, "NameNotEditableItem");
         NameNotEditableItem item2 = new NameNotEditableItem(null, "NameNotEditableItem2");
         NameNotEditableItem item3 = new NameNotEditableItem(null, "NameNotEditableItem2");
         NameNotEditableItem item4 = new NameNotEditableItem(null, "NameNotEditableItem2");
         NameNotEditableItem item5 = new NameNotEditableItem(null, "NameNotEditableItem2");
 
-        // WHEN
+        // Act
         try {
+            long startTime = System.currentTimeMillis();
+
             item.renameTo("NewName");
             item2.renameTo("NewName2");
             item3.renameTo("NewName3");
             item4.renameTo("NewName4");
             item5.renameTo("NewName5");
+
+            long endTime = System.currentTimeMillis();
+
+            // Assert
+            System.out.println("Tempo gasto em ms foi: ");
+            System.out.println(endTime - startTime);
+            assertTrue("Era esperado que a simples renomeacao seja rapida!", (endTime - startTime) < 2500);
         } catch (IOException e) {
-            // THEN
+
             assertEquals("Trying to rename an item that does not support this operation.", e.getMessage());
             assertEquals("NameNotEditableItem", item.getName());
         }
         System.out.println("Fim do teste");
     }
-
-    /*private static class meuStubAbstractItem extends AbstractItem {
-
-        protected meuStubAbstractItem(ItemGroup parent, String name) {
-            super(parent, name);
-        }
-
-        @Override
-        public Collection<? extends Job> getAllJobs() {
-            return null;
-        }
-
-        @Override
-        public void save() {
-            // No-op
-        }
-
-        @Override
-        public File getRootDir() {  // Note the change to public visibility
-            return new File("fake-root-dir");
-        }
-
-        // Mocking the renameFile method to simulate renaming behavior
-        public boolean renameFile(File oldRoot, File newRoot) {
-            return oldRoot.renameTo(newRoot);
-        }
-    }
-
-    private meuStubAbstractItem item;
-
-    @Before
-    public void setUp() {
-        item = spy(new meuStubAbstractItem(null, "meuStubAbstractItem"));
-    }
-
-    @Test
-    public void meuexcessoDeTempoDevidoSleep() throws IOException {
-        meuStubAbstractItem item = spy(new meuStubAbstractItem(null, "meuStubAbstractItem"));
-        doReturn(true).when(item).isNameEditable();
-        doReturn(new File("fake-old-root-dir")).when(item).getRootDir();
-
-        // Mock the renameFile method to fail the first few times
-        File newRoot = new File("fake-new-root-dir");
-        doReturn(false, false, false, false, true).when(item).renameFile(any(File.class), eq(newRoot));
-
-        long startTime = System.currentTimeMillis();
-
-        item.renameTo("NewName");
-
-        long endTime = System.currentTimeMillis();
-
-        assertTrue("Expected at least 2000ms to have passed", (endTime - startTime) >= 2000);
-
-        verify(item, times(1)).doSetName("NewName");
-    }*/
 
 }
