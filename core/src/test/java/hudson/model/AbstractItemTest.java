@@ -154,27 +154,54 @@ public class AbstractItemTest {
 
         @Override
         public boolean isNameEditable() {
-            return false; //so far it's the default value, but it's good to be explicit for test.
+            return true; //so far it's the default value, but it's good to be explicit for test.
         }
     }
 
-    //@Test
+    @Test
     //@Issue("JENKINS-58571")
-    //public void excessoTempoDevidoSleep() {
+    public void excessoTempoDevidoSleep() {
+        // Arrange
+        GenericItem itemGenerico = new GenericItem(null, "NomeAntigo");
+        // Act
+        try {
+            long startTime = System.currentTimeMillis();
+
+            itemGenerico.renameTo("NovoNomeGenerico");
+
+            long endTime = System.currentTimeMillis();
 
 
-    //}
+            System.out.println("Tempo gasto em ms foi: ");
+            System.out.println(endTime - startTime);
+            //System.out.println(itemGenerico.getName());
+
+            // Assert
+            assertEquals("NovoNomeGenerico", itemGenerico.getName());
+            assertTrue("Era esperado que a simples renomeacao seja rapida!", (endTime - startTime) < 500);
+        } catch (IOException e) {
+
+            assertEquals("Trying to rename an item that does not support this operation.", e.getMessage());
+            assertEquals("NameNotEditableItem", itemGenerico.getName());
+        }
+        System.out.println("Fim do teste");
+    }
 
     @Test
     //@Issue("JENKINS-58571")
     public void excessoTempoMultiplosRename() {
 
         // Arrange
-        NameNotEditableItem item = new NameNotEditableItem(null, "NameNotEditableItem");
-        NameNotEditableItem item2 = new NameNotEditableItem(null, "NameNotEditableItem2");
-        NameNotEditableItem item3 = new NameNotEditableItem(null, "NameNotEditableItem2");
-        NameNotEditableItem item4 = new NameNotEditableItem(null, "NameNotEditableItem2");
-        NameNotEditableItem item5 = new NameNotEditableItem(null, "NameNotEditableItem2");
+        GenericItem item = new GenericItem(null, "NomeAntigo1");
+        GenericItem item2 = new GenericItem(null, "NomeAntigo2");
+        GenericItem item3 = new GenericItem(null, "NomeAntigo3");
+        GenericItem item4 = new GenericItem(null, "NomeAntigo4");
+        GenericItem item5 = new GenericItem(null, "NomeAntigo5");
+        GenericItem item6 = new GenericItem(null, "NomeAntigo6");
+        GenericItem item7 = new GenericItem(null, "NomeAntigo7");
+        GenericItem item8 = new GenericItem(null, "NomeAntigo8");
+        GenericItem item9 = new GenericItem(null, "NomeAntigo9");
+        GenericItem item10 = new GenericItem(null, "NomeAntigo10");
 
         // Act
         try {
@@ -185,13 +212,22 @@ public class AbstractItemTest {
             item3.renameTo("NewName3");
             item4.renameTo("NewName4");
             item5.renameTo("NewName5");
+            item6.renameTo("NewName6");
+            item7.renameTo("NewName7");
+            item8.renameTo("NewName8");
+            item9.renameTo("NewName9");
+            item10.renameTo("NewName10");
 
             long endTime = System.currentTimeMillis();
 
-            // Assert
+
             System.out.println("Tempo gasto em ms foi: ");
             System.out.println(endTime - startTime);
-            assertTrue("Era esperado que a simples renomeacao seja rapida!", (endTime - startTime) < 2500);
+            //System.out.println(item.getName());
+
+            // Assert
+            assertEquals("NewName", item.getName());
+            assertTrue("Era esperado que a simples renomeacao seja rapida!", (endTime - startTime) < 5000);
         } catch (IOException e) {
 
             assertEquals("Trying to rename an item that does not support this operation.", e.getMessage());
