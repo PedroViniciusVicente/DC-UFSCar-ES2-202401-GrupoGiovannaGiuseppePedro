@@ -3,11 +3,17 @@ package hudson.model;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
+
 
 import java.io.IOException;
 import java.util.Collection;
 import org.junit.Test;
 import org.jvnet.hudson.test.Issue;
+
+import static org.mockito.Mockito.*;
+import java.io.File;
+import org.junit.Before;
 
 /**
  * @author kingfai
@@ -153,8 +159,8 @@ public class AbstractItemTest {
     }
 
     @Test
-    @Issue("JENKINS-58571")
-    public void meuTesteaa() {
+    //@Issue("JENKINS-58571")
+    public void excessoDeTempoDevidoSleep() {
 
         // GIVEN
         NameNotEditableItem item = new NameNotEditableItem(null, "NameNotEditableItem");
@@ -171,5 +177,60 @@ public class AbstractItemTest {
         }
         System.out.println("Olaa");
     }
+
+    /*private static class meuStubAbstractItem extends AbstractItem {
+
+        protected meuStubAbstractItem(ItemGroup parent, String name) {
+            super(parent, name);
+        }
+
+        @Override
+        public Collection<? extends Job> getAllJobs() {
+            return null;
+        }
+
+        @Override
+        public void save() {
+            // No-op
+        }
+
+        @Override
+        public File getRootDir() {  // Note the change to public visibility
+            return new File("fake-root-dir");
+        }
+
+        // Mocking the renameFile method to simulate renaming behavior
+        public boolean renameFile(File oldRoot, File newRoot) {
+            return oldRoot.renameTo(newRoot);
+        }
+    }
+
+    private meuStubAbstractItem item;
+
+    @Before
+    public void setUp() {
+        item = spy(new meuStubAbstractItem(null, "meuStubAbstractItem"));
+    }
+
+    @Test
+    public void meuexcessoDeTempoDevidoSleep() throws IOException {
+        meuStubAbstractItem item = spy(new meuStubAbstractItem(null, "meuStubAbstractItem"));
+        doReturn(true).when(item).isNameEditable();
+        doReturn(new File("fake-old-root-dir")).when(item).getRootDir();
+
+        // Mock the renameFile method to fail the first few times
+        File newRoot = new File("fake-new-root-dir");
+        doReturn(false, false, false, false, true).when(item).renameFile(any(File.class), eq(newRoot));
+
+        long startTime = System.currentTimeMillis();
+
+        item.renameTo("NewName");
+
+        long endTime = System.currentTimeMillis();
+
+        assertTrue("Expected at least 2000ms to have passed", (endTime - startTime) >= 2000);
+
+        verify(item, times(1)).doSetName("NewName");
+    }*/
 
 }

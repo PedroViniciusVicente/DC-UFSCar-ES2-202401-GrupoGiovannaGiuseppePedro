@@ -349,60 +349,69 @@ public abstract class AbstractItem extends Actionable implements Loadable, Item,
      */
     @SuppressFBWarnings(value = "SWL_SLEEP_WITH_LOCK_HELD", justification = "no big deal")
     protected void renameTo(final String newName) throws IOException {
-        System.out.println("Testandoooaaa");
+        System.out.println("Entrou na funcao renameTo");
 
-        if (!isNameEditable()) {
-            throw new IOException("Trying to rename an item that does not support this operation.");
-        }
+        //if (!isNameEditable()) {
+        //    throw new IOException("Trying to rename an item that does not support this operation.");
+        //}
 
         // always synchronize from bigger objects first
-        final ItemGroup parent = getParent();
-        String oldName = this.name;
-        String oldFullName = getFullName();
-        synchronized (parent) {
-            synchronized (this) {
-                // sanity check
-                if (newName == null)
-                    throw new IllegalArgumentException("New name is not given");
+        //final ItemGroup parent = getParent();
+        //String oldName = this.name;
+        //String oldFullName = getFullName();
+        //synchronized (parent) {
+        synchronized (this) {
+            System.out.println("Entrou no synchronized");
+            // sanity check
+            if (newName == null)
+                throw new IllegalArgumentException("New name is not given");
 
-                // noop?
-                if (this.name.equals(newName))
-                    return;
+            // noop?
+            if (this.name.equals(newName))
+                return;
 
-                // the lookup is case insensitive, so we should not fail if this item was the “existing” one
-                // to allow people to rename "Foo" to "foo", for example.
-                // see http://www.nabble.com/error-on-renaming-project-tt18061629.html
-                Items.verifyItemDoesNotAlreadyExist(parent, newName, this);
+            // the lookup is case insensitive, so we should not fail if this item was the “existing” one
+            // to allow people to rename "Foo" to "foo", for example.
+            // see http://www.nabble.com/error-on-renaming-project-tt18061629.html
+            //Items.verifyItemDoesNotAlreadyExist(parent, newName, this);
+            //System.out.println("passou aqui synchronized");
 
-                File oldRoot = this.getRootDir();
+            //File oldRoot = this.getRootDir();
 
-                doSetName(newName);
-                File newRoot = this.getRootDir();
+            doSetName(newName);
+            //File newRoot = this.getRootDir();
 
-                boolean success = false;
+            boolean success = false;
 
-                try { // rename data files
-                    boolean interrupted = false;
-                    boolean renamed = false;
+            try { // rename data files
+                System.out.println("Entrou no try");
+                boolean interrupted = false;
+                boolean renamed = false;
 
-                    // try to rename the job directory.
-                    // this may fail on Windows due to some other processes
-                    // accessing a file.
-                    // so retry few times before we fall back to copy.
-                    for (int retry = 0; retry < 5; retry++) {
-                        if (oldRoot.renameTo(newRoot)) {
-                            renamed = true;
-                            break; // succeeded
-                        }
-                        try {
-                            Thread.sleep(500);
-                        } catch (InterruptedException e) {
-                            // process the interruption later
-                            interrupted = true;
-                        }
+                // try to rename the job directory.
+                // this may fail on Windows due to some other processes
+                // accessing a file.
+                // so retry few times before we fall back to copy.
+                //for (int retry = 0; retry < 5; retry++) {
+                    System.out.println("Entrou no for");
+                    //if (oldRoot.renameTo(newRoot)) {
+                    //    renamed = true;
+                        //break; // succeeded
+                    //}
+                    try {
+                        System.out.println("Chegou no sleep!");
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        // process the interruption later
+                        interrupted = true;
                     }
-
-                    if (interrupted)
+                //}
+            } finally {
+                System.out.println("apenas teste");
+            }
+        }
+    }
+                    /*if (interrupted)
                         Thread.currentThread().interrupt();
 
                     if (!renamed) {
@@ -446,7 +455,7 @@ public abstract class AbstractItem extends Actionable implements Loadable, Item,
             }
         }
         ItemListener.fireLocationChange(this, oldFullName);
-    }
+    }*/
 
 
     /**
