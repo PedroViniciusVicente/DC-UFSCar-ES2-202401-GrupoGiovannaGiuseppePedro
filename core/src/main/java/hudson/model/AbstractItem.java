@@ -401,6 +401,7 @@ public abstract class AbstractItem extends Actionable implements Loadable, Item,
                     try {
                         System.out.println("Chegou no sleep!");
                         Thread.sleep(500);
+                        System.out.println("Saiu no sleep!");
                     } catch (InterruptedException e) {
                         // process the interruption later
                         interrupted = true;

@@ -141,9 +141,9 @@ public class AbstractItemTest {
         assertEquals("NameNotEditableItem", item.getName());
     }
 
-    private static class NameEditableItem extends AbstractItem {
+    private static class GenericItem extends AbstractItem {
 
-        protected NameEditableItem(ItemGroup parent, String name) {
+        protected GenericItem(ItemGroup parent, String name) {
             super(parent, name);
         }
 
@@ -164,18 +164,24 @@ public class AbstractItemTest {
 
         // GIVEN
         NameNotEditableItem item = new NameNotEditableItem(null, "NameNotEditableItem");
+        NameNotEditableItem item2 = new NameNotEditableItem(null, "NameNotEditableItem2");
+        NameNotEditableItem item3 = new NameNotEditableItem(null, "NameNotEditableItem2");
+        NameNotEditableItem item4 = new NameNotEditableItem(null, "NameNotEditableItem2");
+        NameNotEditableItem item5 = new NameNotEditableItem(null, "NameNotEditableItem2");
 
         // WHEN
         try {
             item.renameTo("NewName");
-            // Se chegar aqui, o teste falha, pois deveria lançar uma IOException
-            //fail("Expected IOException was not thrown.");
+            item2.renameTo("NewName2");
+            item3.renameTo("NewName3");
+            item4.renameTo("NewName4");
+            item5.renameTo("NewName5");
         } catch (IOException e) {
             // THEN
             assertEquals("Trying to rename an item that does not support this operation.", e.getMessage());
             assertEquals("NameNotEditableItem", item.getName());
         }
-        System.out.println("Olaa");
+        System.out.println("Fim do teste");
     }
 
     /*private static class meuStubAbstractItem extends AbstractItem {
